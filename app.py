@@ -49,6 +49,18 @@ async def add_user(user: User):
   db.append(user)
   return {"id": user.id}
 
+#HTTP PUT REQUESTS
+@app.put("/api/users/{id}")
+async def update_user(id: UUID, updated_user: User):
+  for i, user in enumerate(db):
+    if user.id == id:
+      db[i] = updated_user
+      return {"message":f"User {id} foi atualizado com sucesso."}
+  raise HTTPException(
+    status_code= 404,
+    detail= f"Usuário com o id: {id} não encontrado."
+  )
+
 @app.delete("/api/users/{id}")
 async def remove_user(id: UUID):
   for user in db:
